@@ -18,7 +18,7 @@ struct TrackHubApp: App {
 
     // MARK: Internal
 
-    @StateObject var authViewModel: AuthViewModel = .init(authService: AuthServiceImp())
+    @StateObject var authViewModel: AuthViewModel = .init(authService: AppDependencies.shared.authService)
 
     var body: some Scene {
         WindowGroup {
@@ -28,7 +28,8 @@ struct TrackHubApp: App {
                 } else {
                     AuthScreen()
                 }
-            }.environmentObject(authViewModel)
+            }
+            .environmentObject(authViewModel)
         }
     }
 }

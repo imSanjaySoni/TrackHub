@@ -10,17 +10,18 @@ import SwiftUI
 struct InfoCardView: View {
     // MARK: Lifecycle
 
-    init(label: String, image: String, value: Int, state: State = .idle, action: @escaping () -> Void) {
+    init(label: String, image: String, value: Int, progress: Int? = nil, state: ProgressType = .idle, action: @escaping () -> Void) {
         self.label = label
         self.image = image
         self.value = value
+        self.progress = progress
         self.state = state
         self.action = action
     }
 
     // MARK: Internal
 
-    enum State {
+    enum ProgressType {
         case idle
         case gain
         case loss
@@ -30,42 +31,54 @@ struct InfoCardView: View {
         HStack(spacing: 20) {
             Image(image)
                 .resizable()
-                .frame(width: 40, height: 40)
-                .foregroundColor(.green)
+                .frame(width: 30, height: 30)
+                .foregroundColor(.onPrimary)
 
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 0) {
+            VStack(alignment: .leading) {
+                HStack(spacing: 6) {
                     Text("\(value)")
                         .font(.title2)
                         .foregroundColor(.onPrimary)
 
-                    switch state {
-                    case .idle:
-                        EmptyView()
+                    HStack(spacing: 0) {
+                        switch state {
+                        case .idle:
+                            EmptyView()
+                        case .gain:
+                            Image(Assets.Bold.arrowUp)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 16)
+                                .foregroundColor(.green)
+                        case .loss:
+                            Image(Assets.Bold.arrowDown)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 16)
+                                .foregroundColor(.red)
+                        }
 
-                    case .gain:
-                        Image(Assets.Bold.arrowUp)
-                            .foregroundColor(.green)
-                    case .loss:
-                        Image(Assets.Bold.arrowDown)
-                            .foregroundColor(.red)
+                        if let progress {
+                            Text("\(progress)")
+                                .font(.callout)
+                                .foregroundColor(.onPrimary)
+                        }
                     }
                 }
 
                 Text(label)
-                    .font(.callout)
+                    .font(.caption)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
+                .foregroundColor(.gray.opacity(0.3))
         }
         .foregroundColor(.gray)
-        .padding()
+        .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .if(colorScheme == .dark) {
-            $0.background(.ultraThinMaterial.opacity(0.7))
-        }
+        .background(.ultraThinMaterial.opacity(0.7))
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(.gray.opacity(0.3))
@@ -79,10 +92,9 @@ struct InfoCardView: View {
     private let label: String
     private let image: String
     private let value: Int
-    private let state: State
+    private let progress: Int?
+    private let state: ProgressType
     private let action: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
 }
 
 struct InfoCardView_Previews: PreviewProvider {

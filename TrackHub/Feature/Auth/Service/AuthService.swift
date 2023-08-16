@@ -15,18 +15,26 @@ protocol AuthService {
 }
 
 final class AuthServiceImp: AuthService {
-    // MARK: Internal
+    private let userDefaultService: UserDefaultsService
+
+    init(userDefaultService: UserDefaultsService) {
+        self.userDefaultService = userDefaultService
+    }
+
+    func getAuthToken() -> String? {
+        userDefaultService.getAuthToken()
+    }
 
     func signIn() async throws {
         do {
             let authToken = try await loginWithGitHub()
 
             guard let authToken else {
-                return
+                throw AuthError.unknown
             }
 
             // Store AuthToken to UserDefaults
-            cacheAuthToken(authToken)
+            userDefaultService.setAuthToken(token: authToken)
         } catch {
             throw AuthError.unknown
         }
@@ -34,24 +42,24 @@ final class AuthServiceImp: AuthService {
 
     func signOut() throws {
         try Auth.auth().signOut()
-        UserDefaults.standard.removeObject(forKey: Keys.AuthToken.rawValue)
-    }
-
-    func getAuthToken() -> String? {
-        return UserDefaults.standard.string(forKey: Keys.AuthToken.rawValue)
-    }
-
-    // MARK: Private
-
-    private func cacheAuthToken(_ token: String) {
-        UserDefaults.standard.setValue(token, forKey: Keys.AuthToken.rawValue)
+        userDefaultService.reset()
     }
 
     private func loginWithGitHub() async throws -> String? {
-        // Setup GitHub OAuth provider
+        /// Setup GitHub OAuth provider
         let provider = OAuthProvider(providerID: "github.com")
-        provider.customParameters = ["allow_signup": "false"]
+
+        /*
+         Set scope for GitHub APIs
+         User: Grants read/write access to profile info only. Note that this scope includes user:email and user:follow.
+            read:user   ->  Grants access to read a user's profile data.
+            user:email  ->  Grants read access to a user's email addresses.
+            user:follow ->  Grants access to follow or unfollow other users.
+         */
         provider.scopes = ["user"]
+
+        /// Disable GitHub signup option
+        provider.customParameters = ["allow_signup": "false"]
 
         let credential = try await provider.credential(with: nil)
 

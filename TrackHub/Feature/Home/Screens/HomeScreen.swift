@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum UsersType: String {
-    case Following
-    case Followers
-}
-
 struct HomeScreen: View {
     // MARK: Internal
 
@@ -19,7 +14,7 @@ struct HomeScreen: View {
         NavigationStack(path: $path) {
             RequestPhaseView(vm.user) { user in
                 if let user {
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         UserProfileView(
                             user: user,
                             onFollowersTap: {
@@ -48,24 +43,33 @@ struct HomeScreen: View {
                 for: UsersType.self,
                 destination: { UsersScreen(usersType: $0, title: $0.rawValue) }
             )
-            .padding()
+            .padding(.horizontal)
             .fillFrame()
             .ignoresSafeArea(.all, edges: .bottom)
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.inline)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 
     // MARK: Private
 
     @State private var path: [UsersType] = []
-    @StateObject private var vm: HomeViewModel = .init(usersService: UsersServiceImp(apiClient: GithubApiClientImp()))
+
+    @StateObject private var vm: HomeViewModel = .init(usersService: AppDependencies.shared.usersService)
 
     @ViewBuilder
     private func InfoGrids() -> some View {
         VStack(alignment: .leading, spacing: 12) {
+            Text("Activity")
+                .font(.title2)
+                .foregroundColor(.onPrimary)
+
             InfoCardView(
                 label: "New Followers",
-                image: Assets.Bold.arrowUp,
+                image: Assets.gitHub,
                 value: 1230,
+                progress: 12,
                 state: .gain
             ) {
                 path.append(.Followers)
@@ -75,6 +79,7 @@ struct HomeScreen: View {
                 label: "Follower Lost",
                 image: Assets.Bold.arrowDown,
                 value: 12,
+                progress: 12,
                 state: .loss
             ) {}
 

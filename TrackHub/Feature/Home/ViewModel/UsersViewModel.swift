@@ -11,8 +11,8 @@ import Foundation
 final class UsersViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(_ userService: UsersService) {
-        self.service = userService
+    init(usersService: UsersService) {
+        self.service = usersService
     }
 
     // MARK: Internal

@@ -6,46 +6,31 @@
 //
 
 import Foundation
-import SwiftUI
-
-enum Keys: String {
-    case AuthToken
-}
 
 enum Assets {
     enum Bold {
-        static let activity = "Bold/Activity"
-        static let arrowUp = "Bold/ArrowUp"
-        static let arrowDown = "Bold/ArrowDown"
-        static let graph = "Bold/Graph"
-        static let home = "Bold/Home"
-        static let setting = "Bold/Setting"
-        static let mutual = "Bold/Mutual"
-        static let follower = "Bold/Follower"
-        static let following = "Bold/Following"
+        static let activity = "Icons/Bold/Activity"
+        static let arrowUp = "Icons/Bold/ArrowUp"
+        static let arrowDown = "Icons/Bold/ArrowDown"
+        static let graph = "Icons/Bold/Graph"
+        static let home = "Icons/Bold/Home"
+        static let setting = "Icons/Bold/Setting"
+        static let mutual = "Icons/Bold/Mutual"
+        static let follower = "Icons/Bold/Follower"
+        static let following = "Icons/Bold/Following"
     }
 
     enum Outline {
-        static let activity = "Outline/Activity"
-        static let graph = "Outline/Graph"
-        static let home = "Outline/Home"
-        static let setting = "Outline/Setting"
-        static let work = "Outline/Work"
-        static let users = "Outline/Users"
-        static let location = "Outline/Location"
-        static let email = "Outline/Message"
+        static let activity = "Icons/Outline/Activity"
+        static let graph = "Icons/Outline/Graph"
+        static let home = "Icons/Outline/Home"
+        static let setting = "Icons/Outline/Setting"
+        static let work = "Icons/Outline/Work"
+        static let users = "Icons/Outline/Users"
+        static let location = "Icons/Outline/Location"
+        static let email = "Icons/Outline/Message"
     }
 
-    static let trackHub = "TrackHub"
-    static let gitHub = "Github"
-}
-
-extension Color {
-    static var primary: Color {
-        Color("Primary")
-    }
-
-    static var onPrimary: Color {
-        Color("OnPrimary")
-    }
+    static let trackHub = "Icons/TrackHub"
+    static let gitHub = "Icons/Github"
 }

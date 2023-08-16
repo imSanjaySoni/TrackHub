@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1080087439430-bhr9d920kqmbn4lgeol2tq03vuulj4fd.apps.googleusercontent.com</string>
+	<string>1080087439430-8ensfsc2j2tu6uv6lnvb7u7pv72mj0mg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1080087439430-bhr9d920kqmbn4lgeol2tq03vuulj4fd</string>
+	<string>com.googleusercontent.apps.1080087439430-8ensfsc2j2tu6uv6lnvb7u7pv72mj0mg</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDNcaWCjdJNqr3TtGzOhaHHYFwKnDij2A0</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.imsanjaysoni.trackhub</string>
+	<string>com.imsanjaysoni.TrackHub</string>
 	<key>PROJECT_ID</key>
 	<string>trackhub-github-analyzer</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1080087439430:ios:52219ad6f0474a81fa0247</string>
+	<string>1:1080087439430:ios:1d475538d987c3d4fa0247</string>
 </dict>
 </plist>

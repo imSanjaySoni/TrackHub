@@ -7,10 +7,16 @@
 
 import Foundation
 
+enum UsersType: String {
+    case Following
+    case Followers
+}
+
 enum RelationType {
     case mutual
     case follower
     case following
+    case noRelation
 
     // MARK: Internal
 
@@ -22,6 +28,8 @@ enum RelationType {
             return "Follows you"
         case .following:
             return "You follow"
+        case .noRelation:
+            return "No relation"
         }
     }
 
@@ -32,6 +40,8 @@ enum RelationType {
         case .follower:
             return Assets.Bold.follower
         case .following:
+            return Assets.Bold.following
+        case .noRelation:
             return Assets.Bold.following
         }
     }

@@ -49,7 +49,8 @@ struct UserProfileScreen: View {
 
     // MARK: Private
 
-    @StateObject private var vm: UserProfileViewModel = .init(usersService: UsersServiceImp(apiClient: GithubApiClientImp()))
+    @StateObject private var vm: UserProfileViewModel = .init(usersService: AppDependencies.shared.usersService)
+
     @State private var isFollowing: Bool = false
 
     @ViewBuilder
@@ -76,10 +77,11 @@ struct UserProfileScreen: View {
                     .foregroundColor(.onPrimary)
                     .frame(width: 20, height: 20)
 
-                Text("Find This Profile On GitHub")
+                Text("View this profile on GitHub")
             }
             .foregroundColor(.onPrimary)
             .font(.callout)
+            .fontWeight(.medium)
             .padding()
             .frame(minWidth: 0, maxWidth: .infinity)
             .overlay(
@@ -101,8 +103,10 @@ struct UserProfileScreen: View {
 
                     Text(isFollowing ? "Following" : "Follow")
                 }
+
                 .foregroundColor(.onPrimary)
                 .font(.callout)
+                .fontWeight(.medium)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .background(

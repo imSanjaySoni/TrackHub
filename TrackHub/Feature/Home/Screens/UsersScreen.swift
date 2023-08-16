@@ -39,14 +39,16 @@ struct UsersScreen: View {
             item: $selectedUser,
             content: { user in
                 UserProfileScreen(username: user.username)
-                    .presentationDetents([.fraction(0.7), .large])
+                    .presentationDetents([.large])
                     .presentationDragIndicator(.automatic)
-            })
+            }
+        )
     }
 
     // MARK: Private
 
-    @StateObject private var vm: UsersViewModel = .init(UsersServiceImp(apiClient: GithubApiClientImp()))
+    @StateObject private var vm: UsersViewModel = .init(usersService: AppDependencies.shared.usersService)
+
     @State private var selectedUser: BasicUser? = nil
 }
 

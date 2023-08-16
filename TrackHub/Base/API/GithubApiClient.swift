@@ -11,26 +11,32 @@ protocol GithubApiClient {
     func fetchCurrentUser() async throws -> User
     func fetchUserProfile(_ username: String) async throws -> User
 
-    func fetchFollowers(after username: String?) async throws -> [BasicUser]
-    func fetchFollowing(after username: String?) async throws -> [BasicUser]
+    func fetchFollowers(from page: Int) async throws -> [BasicUser]
+    func fetchFollowing(from page: Int) async throws -> [BasicUser]
 
     func followUser(_ username: String) async throws
     func unfollowUser(_ username: String) async throws
 }
 
 final class GithubApiClientImp: GithubApiClient {
+    // MARK: Lifecycle
+
+    init(userDefaultService: UserDefaultsService) {
+        self.userDefaultService = userDefaultService
+    }
+
     // MARK: Internal
 
     func fetchCurrentUser() async throws -> User {
         try await call(.profile, method: .GET)
     }
 
-    func fetchFollowers(after username: String? = nil) async throws -> [BasicUser] {
-        return try await call(.followers, method: .GET, queries: defaultQueries(username))
+    func fetchFollowers(from page: Int) async throws -> [BasicUser] {
+        return try await call(.followers, method: .GET, queries: defaultQueries(page))
     }
 
-    func fetchFollowing(after username: String? = nil) async throws -> [BasicUser] {
-        return try await call(.following, method: .GET, queries: defaultQueries(username))
+    func fetchFollowing(from page: Int) async throws -> [BasicUser] {
+        return try await call(.following, method: .GET, queries: defaultQueries(page))
     }
 
     func followUser(_ username: String) async throws {
@@ -83,22 +89,17 @@ final class GithubApiClientImp: GithubApiClient {
 
     private enum QueryKey: String {
         case perPage = "per_page"
-        case since
+        case page
     }
 
+    private let userDefaultService: UserDefaultsService
     private let baseURL = "https://api.github.com"
 
-    private var authToken: String? {
-        UserDefaults.standard.string(forKey: Keys.AuthToken.rawValue)
-    }
-
-    private func defaultQueries(_ username: String?) -> [String: String] {
-        var queries = [QueryKey.perPage.rawValue: "100"]
-
-        if let username {
-            queries.updateValue(QueryKey.since.rawValue, forKey: username)
-        }
-        return queries
+    private func defaultQueries(_ page: Int) -> [String: String] {
+        return [
+            QueryKey.perPage.rawValue: "100",
+            QueryKey.page.rawValue: "\(page)"
+        ]
     }
 
     private func call<T: Codable>(_ endPoint: Endpoint, method: Method, queries: [String: String]? = nil) async throws -> T {
@@ -117,7 +118,7 @@ final class GithubApiClientImp: GithubApiClient {
     private func request(for endpoint: Endpoint, method: Method, queries: [String: String]?) throws -> URLRequest {
         let path = "\(baseURL)\(endpoint.rawValue)"
 
-        guard let authToken else {
+        guard let authToken = userDefaultService.getAuthToken() else {
             throw APIError.unauthorised
         }
 

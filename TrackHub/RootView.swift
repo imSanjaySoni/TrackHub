@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RootView: View {
     // MARK: Internal
+    
+    
 
     var body: some View {
         TabView(selection: $activeTab) {
