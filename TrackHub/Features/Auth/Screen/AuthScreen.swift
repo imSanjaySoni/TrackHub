@@ -36,8 +36,6 @@ struct AuthScreen: View {
     @EnvironmentObject private var vm: AuthViewModel
 }
 
-struct AuthScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthScreen()
-    }
+#Preview {
+    AuthScreen()
 }

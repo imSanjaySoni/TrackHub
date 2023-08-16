@@ -16,7 +16,7 @@ struct UserProfileView: View {
         self.onFollowersTap = nil
         self.onFollowingTap = nil
     }
-    
+
     init(user: User, onFollowersTap: @escaping () -> Void, onFollowingTap: @escaping () -> Void) {
         self.user = user
         self.onFollowersTap = onFollowersTap
@@ -51,7 +51,7 @@ struct UserProfileView: View {
             CachedAsyncImage(url: URL(string: user.avatarUrl)) { image in
                 image
                     .resizable()
-                
+
             } placeholder: {
                 ProgressView()
             }
@@ -61,14 +61,14 @@ struct UserProfileView: View {
 
             Spacer()
                 .frame(maxWidth: 20)
-            
+
             VStack(alignment: .leading) {
                 if let name = user.name {
                     Text(name)
                         .font(.title)
                         .fontWeight(.bold)
                 }
-                
+
                 Text(user.username)
                     .font(user.name == nil ? .title : .callout)
                     .foregroundColor(user.name == nil ? nil : .gray)
@@ -84,25 +84,25 @@ struct UserProfileView: View {
                 .padding(.vertical)
         }
     }
-    
+
     @ViewBuilder
     private func ProfileInfo() -> some View {
         Group {
             if let company = user.company {
                 Label(company, image: Assets.Outline.work)
             }
-            
+
             if let location = user.location {
                 Label(location, image: Assets.Outline.location)
             }
-            
+
             if let email = user.email {
                 Label(email, image: Assets.Outline.email)
             }
-            
+
             HStack {
                 Image(Assets.Outline.users)
-                
+
                 Button(
                     action: {
                         if let onFollowersTap {
@@ -116,9 +116,9 @@ struct UserProfileView: View {
                         Text("Followers")
                     }
                     .disabled(onFollowersTap == nil)
-                
+
                 Text("•")
-                
+
                 Button(
                     action: {
                         if let onFollowingTap {
@@ -129,7 +129,7 @@ struct UserProfileView: View {
                     Text("\(user.following)")
                         .fontWeight(.bold)
                         .foregroundColor(.onPrimary)
-                    
+
                     Text("Following")
                 }
                 .disabled(onFollowingTap == nil)
@@ -138,4 +138,8 @@ struct UserProfileView: View {
         .foregroundColor(.gray)
         .font(.callout)
     }
+}
+
+#Preview {
+    UserProfileView(user: .mock)
 }

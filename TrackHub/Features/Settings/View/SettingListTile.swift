@@ -37,8 +37,6 @@ struct SettingListTile: View {
     }
 }
 
-struct SettingListTile_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingListTile("Title")
-    }
+#Preview {
+    SettingListTile("Title")
 }

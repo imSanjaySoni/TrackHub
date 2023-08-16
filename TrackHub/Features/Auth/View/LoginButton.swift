@@ -46,8 +46,6 @@ struct LoginButton: View {
     }
 }
 
-struct LoginButtonView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginButton(true) {}
-    }
+#Preview {
+    LoginButton(true) {}
 }

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SettingsScreen: View {
+    @EnvironmentObject private var vm: AuthViewModel
+
     var body: some View {
         NavigationStack {
             List {
@@ -28,7 +30,9 @@ struct SettingsScreen: View {
                 }
 
                 Section {
-                    Button(role: .destructive) {} label: {
+                    Button(role: .destructive) {
+                        vm.signOut()
+                    } label: {
                         HStack {
                             Text("Logout")
                         }
@@ -40,8 +44,6 @@ struct SettingsScreen: View {
     }
 }
 
-struct SettingScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsScreen()
-    }
+#Preview {
+    SettingsScreen()
 }

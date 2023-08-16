@@ -31,7 +31,7 @@ struct RequestPhaseView<Content: View, T>: View {
         switch phase {
         case .idle,
              .loading:
-            ProgressView()
+            LoadingView()
 
         case .error(let message):
             Text(message)
@@ -44,10 +44,8 @@ struct RequestPhaseView<Content: View, T>: View {
     }
 }
 
-struct PhaseView_Previews: PreviewProvider {
-    static var previews: some View {
-        RequestPhaseView(RequestPhase<String>.idle) { _ in
-            Text("Data View")
-        }
+#Preview {
+    RequestPhaseView(RequestPhase<String>.idle) { _ in
+        Text("Data View")
     }
 }

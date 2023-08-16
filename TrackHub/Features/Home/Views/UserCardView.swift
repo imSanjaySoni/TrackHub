@@ -85,8 +85,6 @@ struct UserCardView: View {
     }
 }
 
-struct UserCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserCardView(user: BasicUser.mock) { _ in }
-    }
+#Preview {
+    UserCardView(user: BasicUser.mock) { _ in }
 }

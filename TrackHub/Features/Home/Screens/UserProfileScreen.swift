@@ -121,8 +121,6 @@ struct UserProfileScreen: View {
     }
 }
 
-struct UserProfile_Previews: PreviewProvider {
-    static var previews: some View {
-        UserProfileScreen(username: "imsanjaysoni")
-    }
+#Preview {
+    UserProfileScreen(username: "imsanjaysoni")
 }

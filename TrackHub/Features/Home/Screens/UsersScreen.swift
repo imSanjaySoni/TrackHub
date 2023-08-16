@@ -52,8 +52,6 @@ struct UsersScreen: View {
     @State private var selectedUser: BasicUser? = nil
 }
 
-struct UsersScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        UsersScreen(usersType: .Followers, title: "Followers")
-    }
+#Preview {
+    UsersScreen(usersType: .Followers, title: "Followers")
 }

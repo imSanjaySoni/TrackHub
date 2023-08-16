@@ -97,8 +97,6 @@ struct InfoCardView: View {
     private let action: () -> Void
 }
 
-struct InfoCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        InfoCardView(label: "Follow Gain", image: Assets.Bold.arrowDown, value: 20) {}
-    }
+#Preview {
+    InfoCardView(label: "Follow Gain", image: Assets.Bold.arrowDown, value: 20) {}
 }

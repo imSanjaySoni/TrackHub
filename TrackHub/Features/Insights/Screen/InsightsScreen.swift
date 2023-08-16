@@ -16,8 +16,6 @@ struct InsightsScreen: View {
     }
 }
 
-struct InsightsScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        InsightsScreen()
-    }
+#Preview {
+    InsightsScreen()
 }
