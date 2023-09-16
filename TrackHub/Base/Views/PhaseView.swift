@@ -8,23 +8,17 @@
 import SwiftUI
 
 struct RequestPhaseView<Content: View, T>: View {
-    // MARK: Lifecycle
+    private let phase: RequestPhase<T>
+    private let dataView: (_ data: T) -> Content
 
-    init(_ phase: RequestPhase<T>, @ViewBuilder body: @escaping (_ data: T?) -> Content) {
+    init(_ phase: RequestPhase<T>, @ViewBuilder body: @escaping (_ data: T) -> Content) {
         self.phase = phase
         self.dataView = body
     }
 
-    // MARK: Internal
-
     var body: some View {
         BuildPhase()
     }
-
-    // MARK: Private
-
-    private let phase: RequestPhase<T>
-    private let dataView: (_ data: T?) -> Content
 
     @ViewBuilder
     private func BuildPhase() -> some View {
@@ -33,13 +27,18 @@ struct RequestPhaseView<Content: View, T>: View {
              .loading:
             LoadingView()
 
+        case .empty:
+            Text("Nothing Found..")
+                .font(.callout)
+                .foregroundColor(.gray)
+
         case .error(let message):
             Text(message)
                 .font(.callout)
                 .foregroundColor(.gray)
 
         case .data(let data):
-            dataView(data)
+            dataView(data!)
         }
     }
 }

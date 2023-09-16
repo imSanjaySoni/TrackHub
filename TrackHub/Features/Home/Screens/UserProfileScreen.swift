@@ -8,56 +8,47 @@
 import SwiftUI
 
 struct UserProfileScreen: View {
-    // MARK: Internal
+    @StateObject private var vm: UserProfileViewModel
 
-    let username: String
+    init(username: String, relation: UserRelationType?) {
+        let value = UserProfileViewModel(
+            usersService: AppDependencies.shared.usersService,
+            username: username,
+            relation: relation
+        )
+        _vm = StateObject(wrappedValue: value)
+    }
 
     var body: some View {
         RequestPhaseView(vm.user) { user in
-            if let user {
-                ScrollView {
-                    Group {
-                        UserProfileView(user: user)
+            ScrollView {
+                Group {
+                    UserProfileView(user: user)
+                    FollowState(vm.relation)
+                }
+                .fillFrame(alignment: .topLeading)
 
-                        if let relation = user.relation {
-                            FollowState(relation)
-                        }
-                    }
-                    .fillFrame(alignment: .topLeading)
+                Spacer()
+                    .frame(height: 32)
 
-                    Spacer()
-                        .frame(height: 32)
-
-                    if let url = URL(string: user.profileUrl) {
-                        GitHubLinkButton(profileUrl: url)
-                            .padding(.bottom)
-                    }
-
-                    FollowButton()
+                if let url = URL(string: user.profileUrl) {
+                    GitHubLinkButton(profileUrl: url)
+                        .padding(.bottom)
                 }
 
-            } else {
-                Text("Nothing found !")
-                    .font(.callout)
-                    .foregroundColor(.gray)
+                FollowButton()
             }
         }
         .padding()
         .padding(.top, 24)
-        .onAppear { vm.loadProfile(for: username) }
+        .onAppear { vm.loadProfile() }
     }
 
-    // MARK: Private
-
-    @StateObject private var vm: UserProfileViewModel = .init(usersService: AppDependencies.shared.usersService)
-
-    @State private var isFollowing: Bool = false
-
     @ViewBuilder
-    private func FollowState(_ state: RelationType) -> some View {
+    private func FollowState(_ state: UserRelationType) -> some View {
         HStack {
             Image(state.icon)
-                .foregroundColor(.green)
+                .foregroundColor(state == .noRelation ? .gray : .green)
                 .containerShape(Circle())
 
             Text(state.label)
@@ -77,7 +68,7 @@ struct UserProfileScreen: View {
                     .foregroundColor(.onPrimary)
                     .frame(width: 20, height: 20)
 
-                Text("View this profile on GitHub")
+                Text("View on GitHub")
             }
             .foregroundColor(.onPrimary)
             .font(.callout)
@@ -93,34 +84,31 @@ struct UserProfileScreen: View {
 
     @ViewBuilder
     private func FollowButton() -> some View {
-        Button(
-            action: {
-                isFollowing.toggle()
-            }) {
-                HStack {
-                    Image(systemName: isFollowing ? "checkmark" : "plus")
-                        .foregroundColor(isFollowing ? .green : .onPrimary)
+        Button(action: vm.followOrUnfollow) {
+            HStack {
+                Image(systemName: vm.isFollowing ? "checkmark" : "plus")
+                    .foregroundColor(vm.isFollowing ? .green : .onPrimary)
 
-                    Text(isFollowing ? "Following" : "Follow")
-                }
-
-                .foregroundColor(.onPrimary)
-                .font(.callout)
-                .fontWeight(.medium)
-                .padding()
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .background(
-                    .thinMaterial.opacity(isFollowing ? 0.5 : 1.0),
-                    in: RoundedRectangle(cornerRadius: 8)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.gray.opacity(0.3))
-                )
+                Text(vm.isFollowing ? "Following" : "Follow")
             }
+
+            .foregroundColor(.onPrimary)
+            .font(.callout)
+            .fontWeight(.medium)
+            .padding()
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .background(
+                .thinMaterial.opacity(vm.isFollowing ? 0.5 : 1.0),
+                in: RoundedRectangle(cornerRadius: 8)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.gray.opacity(0.3))
+            )
+        }
     }
 }
 
 #Preview {
-    UserProfileScreen(username: "imsanjaysoni")
+    UserProfileScreen(username: "imSanjaySoni", relation: .follower)
 }

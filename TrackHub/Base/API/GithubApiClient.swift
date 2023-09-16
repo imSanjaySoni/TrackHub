@@ -19,13 +19,9 @@ protocol GithubApiClient {
 }
 
 final class GithubApiClientImp: GithubApiClient {
-    // MARK: Lifecycle
-
     init(userDefaultService: UserDefaultsService) {
         self.userDefaultService = userDefaultService
     }
-
-    // MARK: Internal
 
     func fetchCurrentUser() async throws -> User {
         try await call(.profile, method: .GET)
@@ -51,8 +47,6 @@ final class GithubApiClientImp: GithubApiClient {
         return try await call(.users(username), method: .GET)
     }
 
-    // MARK: Private
-
     private enum Method: String {
         case GET
         case PUT
@@ -66,8 +60,6 @@ final class GithubApiClientImp: GithubApiClient {
         case users(String)
         case follow(String)
         case unfollow(String)
-
-        // MARK: Internal
 
         var rawValue: String {
             switch self {
@@ -97,7 +89,7 @@ final class GithubApiClientImp: GithubApiClient {
 
     private func defaultQueries(_ page: Int) -> [String: String] {
         return [
-            QueryKey.perPage.rawValue: "100",
+            QueryKey.perPage.rawValue: "\(Values.perPageCount)",
             QueryKey.page.rawValue: "\(page)"
         ]
     }

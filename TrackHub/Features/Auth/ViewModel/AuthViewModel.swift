@@ -9,14 +9,12 @@ import Foundation
 
 @MainActor
 final class AuthViewModel: ObservableObject {
-    // MARK: Lifecycle
+    private let auth: AuthService
 
     init(authService: AuthService) {
         auth = authService
         isAuthenticated = auth.getAuthToken() != nil
     }
-
-    // MARK: Internal
 
     @Published private(set) var authPhase: AuthPhase = .idle
     @Published private(set) var isAuthenticated: Bool
@@ -43,8 +41,4 @@ final class AuthViewModel: ObservableObject {
             print(error.localizedDescription)
         }
     }
-
-    // MARK: Private
-
-    private let auth: AuthService
 }

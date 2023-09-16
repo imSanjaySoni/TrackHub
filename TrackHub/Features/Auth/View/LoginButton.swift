@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct LoginButton: View {
-    // MARK: Lifecycle
+    let loading: Bool
+    let action: () -> Void
 
     init(_ loading: Bool, _ action: @escaping () -> Void) {
         self.loading = loading
         self.action = action
     }
-
-    // MARK: Internal
-
-    let loading: Bool
-    let action: () -> Void
 
     var body: some View {
         Button { action() } label: {

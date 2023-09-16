@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct RootView: View {
-    // MARK: Internal
-    
-    
+    @State private var activeTab: Tabs = .home
 
     var body: some View {
         TabView(selection: $activeTab) {
@@ -26,22 +24,18 @@ struct RootView: View {
                 }
                 .tag(Tabs.insights)
 
-            SettingsScreen()
-                .tabItem {
-                    Label(Tabs.settings.label, image: Tabs.settings.icon(activeTab == Tabs.settings))
-                }
-                .tag(Tabs.settings)
+//            SettingsScreen()
+//                .tabItem {
+//                    Label(Tabs.settings.label, image: Tabs.settings.icon(activeTab == Tabs.settings))
+//                }
+//                .tag(Tabs.settings)
         }
     }
-
-    // MARK: Private
 
     private enum Tabs {
         case home
         case insights
-        case settings
-
-        // MARK: Internal
+//        case settings
 
         var label: String {
             switch self {
@@ -49,8 +43,8 @@ struct RootView: View {
                 return "Home"
             case .insights:
                 return "Insights"
-            case .settings:
-                return "Settings"
+//            case .settings:
+//                return "Settings"
             }
         }
 
@@ -60,13 +54,11 @@ struct RootView: View {
                 return isActive ? Assets.Bold.home : Assets.Outline.home
             case .insights:
                 return isActive ? Assets.Bold.activity : Assets.Outline.activity
-            case .settings:
-                return isActive ? Assets.Bold.setting : Assets.Outline.setting
+//            case .settings:
+//                return isActive ? Assets.Bold.setting : Assets.Outline.setting
             }
         }
     }
-
-    @State private var activeTab: Tabs = .home
 }
 
 struct RootView_Previews: PreviewProvider {

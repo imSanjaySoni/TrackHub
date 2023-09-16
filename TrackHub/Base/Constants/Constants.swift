@@ -18,6 +18,7 @@ enum Assets {
         static let mutual = "Icons/Bold/Mutual"
         static let follower = "Icons/Bold/Follower"
         static let following = "Icons/Bold/Following"
+        static let noRelation = "Icons/Bold/NoRelation"
     }
 
     enum Outline {
@@ -33,4 +34,8 @@ enum Assets {
 
     static let trackHub = "Icons/TrackHub"
     static let gitHub = "Icons/Github"
+}
+
+enum Values {
+    static let perPageCount: Int = 100
 }

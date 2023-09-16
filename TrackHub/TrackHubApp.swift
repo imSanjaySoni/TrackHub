@@ -10,15 +10,14 @@ import SwiftUI
 
 @main
 struct TrackHubApp: App {
-    // MARK: Lifecycle
-
-    init() {
-        FirebaseApp.configure()
-    }
-
-    // MARK: Internal
+    init() { FirebaseApp.configure() }
 
     @StateObject var authViewModel: AuthViewModel = .init(authService: AppDependencies.shared.authService)
+
+    @StateObject var settingsViewModel: SettingsViewModel = .init(
+        cache: AppDependencies.shared.cacheService,
+        userDefaults: AppDependencies.shared.userDefaultsService
+    )
 
     var body: some Scene {
         WindowGroup {
@@ -30,6 +29,8 @@ struct TrackHubApp: App {
                 }
             }
             .environmentObject(authViewModel)
+            .environmentObject(settingsViewModel)
+            .preferredColorScheme(settingsViewModel.appearance.colorScheme)
         }
     }
 }

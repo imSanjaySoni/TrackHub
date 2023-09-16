@@ -9,7 +9,9 @@ import CachedAsyncImage
 import SwiftUI
 
 struct UserProfileView: View {
-    // MARK: Lifecycle
+    let user: User
+    let onFollowersTap: (() -> Void)?
+    let onFollowingTap: (() -> Void)?
 
     init(user: User) {
         self.user = user
@@ -23,18 +25,6 @@ struct UserProfileView: View {
         self.onFollowingTap = onFollowingTap
     }
 
-    // MARK: Internal
-
-    struct UserProfileView_Previews: PreviewProvider {
-        static var previews: some View {
-            UserProfileView(user: User.mock)
-        }
-    }
-
-    let user: User
-    let onFollowersTap: (() -> Void)?
-    let onFollowingTap: (() -> Void)?
-
     var body: some View {
         VStack(alignment: .leading) {
             NameAndAvatar()
@@ -43,21 +33,20 @@ struct UserProfileView: View {
         }
     }
 
-    // MARK: Private
-
     @ViewBuilder
     private func NameAndAvatar() -> some View {
+        let avatarUrl = URL(string: user.avatarUrl)
+
         HStack {
-            CachedAsyncImage(url: URL(string: user.avatarUrl)) { image in
-                image
-                    .resizable()
+            CachedAsyncImage(url: avatarUrl) { image in
+                image.resizable()
 
             } placeholder: {
                 ProgressView()
             }
             .frame(width: 80, height: 80)
             .background(.thinMaterial)
-            .clipShape(Circle())
+            .clipShape(.circle)
 
             Spacer()
                 .frame(maxWidth: 20)

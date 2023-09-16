@@ -9,17 +9,30 @@ import CachedAsyncImage
 import SwiftUI
 
 struct UserCardView: View {
-    // MARK: Lifecycle
+    let user: BasicUser
+    let onFollowStateChange: (Bool) -> Void
+
+    @State private var isFollowing: Bool
 
     init(user: BasicUser, onFollowStateChange: @escaping (Bool) -> Void) {
         self.user = user
         self.onFollowStateChange = onFollowStateChange
+
+        isFollowing = {
+            guard let relation = user.relation else {
+                return false
+            }
+
+            return switch relation {
+            case .follower,
+                 .noRelation:
+                false
+            case .following,
+                 .mutual:
+                true
+            }
+        }()
     }
-
-    // MARK: Internal
-
-    let user: BasicUser
-    let onFollowStateChange: (Bool) -> Void
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -31,8 +44,6 @@ struct UserCardView: View {
     }
 
     // MARK: Private
-
-    @State private var isFollowing: Bool = true
 
     @ViewBuilder
     private func Avatar() -> some View {
@@ -53,7 +64,7 @@ struct UserCardView: View {
                     let x: Double = proxy.size.width - (badgeSize / 2)
                     let y: Double = proxy.size.height - (badgeSize / 2)
 
-                    Image(Assets.Bold.mutual)
+                    Image(user.relation!.icon)
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(.green)

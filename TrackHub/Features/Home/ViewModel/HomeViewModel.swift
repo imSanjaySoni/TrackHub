@@ -9,30 +9,33 @@ import Foundation
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    // MARK: Lifecycle
+    private let usersService: UsersService
+
+    @Published private(set) var phase: RequestPhase<HomeScreenDataModel> = .idle
 
     init(usersService: UsersService) {
         self.usersService = usersService
-        loadCurrentUser()
+        loadScreen()
     }
 
-    // MARK: Internal
-
-    @Published private(set) var user: RequestPhase<User> = .idle
-
-    // MARK: Private
-
-    private let usersService: UsersService
-
-    private func loadCurrentUser() {
+    private func loadScreen() {
         Task {
-            user = .loading
+            phase = .loading
             do {
-                let data = try await usersService.getCurrentUser()
-                user = .data(data)
+                let data = try await usersService.initializeApp()
+                phase = .data(data)
             } catch {
-                user = .error(error.localizedDescription)
+                phase = .error(error.localizedDescription)
             }
+        }
+    }
+
+    func refresh() async {
+        do {
+            let refreshedData = try await usersService.refresh()
+            phase = .data(refreshedData)
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }

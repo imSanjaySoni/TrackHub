@@ -17,6 +17,12 @@ protocol CacheService {
 
     func setFollowings(followings users: [BasicUser]) throws
     func getFollowings() throws -> [BasicUser]
+
+    func setInsightsData(_ users: [BasicUser], for type: UsersType) throws
+    func getInsightsData(for type: UsersType) throws -> [BasicUser]
+
+    func resetUsers() throws
+    func resetAll() throws
 }
 
 enum CacheError: LocalizedError {
@@ -30,11 +36,12 @@ final class CacheServiceImp: CacheService {
         case followings
     }
 
-    private let diskConfig = DiskConfig(name: "Users")
+    private let usersDiskConfig = DiskConfig(name: "Users")
+    private let insightsDiskConfig = DiskConfig(name: "Insights")
 
     private var authUserStorage: DiskStorage<String, User>? {
         let storage = try? DiskStorage<String, User>(
-            config: diskConfig,
+            config: usersDiskConfig,
             transformer: TransformerFactory.forCodable(ofType: User.self)
         )
         return storage
@@ -42,7 +49,15 @@ final class CacheServiceImp: CacheService {
 
     private var usersStorage: DiskStorage<String, [BasicUser]>? {
         let storage = try? DiskStorage<String, [BasicUser]>(
-            config: diskConfig,
+            config: usersDiskConfig,
+            transformer: TransformerFactory.forCodable(ofType: [BasicUser].self)
+        )
+        return storage
+    }
+
+    private var insightsStorage: DiskStorage<String, [BasicUser]>? {
+        let storage = try? DiskStorage<String, [BasicUser]>(
+            config: insightsDiskConfig,
             transformer: TransformerFactory.forCodable(ofType: [BasicUser].self)
         )
         return storage
@@ -79,5 +94,26 @@ final class CacheServiceImp: CacheService {
             throw CacheError.noRecordFound
         }
         return followings
+    }
+
+    func setInsightsData(_ users: [BasicUser], for type: UsersType) throws {
+        try insightsStorage?.setObject(users, forKey: type.rawValue)
+    }
+
+    func getInsightsData(for type: UsersType) throws -> [BasicUser] {
+        guard let users = try insightsStorage?.object(forKey: type.rawValue) else {
+            throw CacheError.noRecordFound
+        }
+        return users
+    }
+
+    func resetUsers() throws {
+        try authUserStorage?.removeAll()
+        try usersStorage?.removeAll()
+    }
+
+    func resetAll() throws {
+        try resetUsers()
+        try insightsStorage?.removeAll()
     }
 }

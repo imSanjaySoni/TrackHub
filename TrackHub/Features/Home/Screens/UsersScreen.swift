@@ -8,50 +8,44 @@
 import SwiftUI
 
 struct UsersScreen: View {
-    // MARK: Internal
+    private let userType: UsersType
+    private let title: String
 
-    let usersType: UsersType
-    let title: String
+    init(userType: UsersType, title: String) {
+        self.userType = userType
+        self.title = title
+    }
+
+    @State private var selectedUser: BasicUser? = nil
+
+    @StateObject private var vm: UsersViewModel = .init(usersService: AppDependencies.shared.usersService)
 
     var body: some View {
-        RequestPhaseView(vm.users) { users in
-            if let users, !users.isEmpty {
-                List {
-                    ForEach(users) { user in
-                        UserCardView(user: user) { isFollowing in
-                            vm.followOrUnfollowUser(with: user.username, for: isFollowing)
-                        }
-                        .onTapGesture {
-                            selectedUser = user
-                        }
+        RequestPhaseView(vm.users, body: { users in
+            List {
+                ForEach(users) { user in
+                    UserCardView(user: user) { isFollowing in
+                        vm.followOrUnfollowUser(with: user.username, for: isFollowing)
                     }
+                    .onTapGesture { selectedUser = user }
                 }
-            } else {
-                Text("Nothing found !")
-                    .font(.callout)
-                    .foregroundColor(.gray)
             }
-        }
+        })
+        .onAppear { vm.loadUsers(for: userType) }
         .listStyle(.plain)
         .navigationTitle(title)
-        .onAppear { vm.loadUsers(for: usersType) }
+        .searchable(text: $vm.searchQuery)
         .sheet(
             item: $selectedUser,
-            content: { user in
-                UserProfileScreen(username: user.username)
+            content: {
+                UserProfileScreen(username: $0.username, relation: $0.relation)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.automatic)
             }
         )
     }
-
-    // MARK: Private
-
-    @StateObject private var vm: UsersViewModel = .init(usersService: AppDependencies.shared.usersService)
-
-    @State private var selectedUser: BasicUser? = nil
 }
 
 #Preview {
-    UsersScreen(usersType: .Followers, title: "Followers")
+    UsersScreen(userType: .followers, title: "Followers")
 }

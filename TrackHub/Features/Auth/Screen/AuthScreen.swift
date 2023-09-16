@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AuthScreen: View {
-    // MARK: Internal
+    @EnvironmentObject private var vm: AuthViewModel
 
     var body: some View {
         VStack {
@@ -30,10 +30,6 @@ struct AuthScreen: View {
             Spacer()
         }
     }
-
-    // MARK: Private
-
-    @EnvironmentObject private var vm: AuthViewModel
 }
 
 #Preview {
