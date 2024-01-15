@@ -19,3 +19,13 @@ TrackHub is the ultimate tool for GitHub enthusiasts, developers, and open-sourc
 
 Discover your GitHub community like never before with TrackHub - the comprehensive GitHub Follower Analyzer. Download now and gain valuable insights into your followers' activity!
 
+#### Screenshots
+
+|                                               |                                               |
+| :-------------------------------------------: | :-------------------------------------------: |
+| <Image src="screenshots/auth.png" width ="300"> | <Image src="screenshots/home.png" width ="300">  |
+| <Image src="screenshots/followers.png" width ="300">  | <Image src="screenshots/following.png" width ="300"> |
+| <Image src="screenshots/user_profile.png" width ="300">  | <Image src="screenshots/settings.png" width ="300">  |
+
+
+
