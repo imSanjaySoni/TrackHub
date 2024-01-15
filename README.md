@@ -1,4 +1,4 @@
-# TrackHub - GitHub Follower Analyzer
+# TrackHub - GitHub Profile Analyzer - (🚧 Dev in progress) 
 TrackHub is a powerful mobile app designed to provide GitHub users with valuable insights into their follower dynamics. Seamlessly integrated with GitHub's authentication system, TrackHub allows users to track and analyze their followers' activity, keeping them informed about who followed or unfollowed them over time.
 
 **Key Features:**
@@ -18,3 +18,4 @@ TrackHub is a powerful mobile app designed to provide GitHub users with valuable
 TrackHub is the ultimate tool for GitHub enthusiasts, developers, and open-source contributors who wish to enhance their GitHub experience. Whether you're managing an open-source project or simply curious about your follower interactions, TrackHub delivers valuable data and statistics to help you optimize your GitHub presence.
 
 Discover your GitHub community like never before with TrackHub - the comprehensive GitHub Follower Analyzer. Download now and gain valuable insights into your followers' activity!
+
