@@ -13,15 +13,20 @@ struct StatisticCardView: View {
     private let value: Int
     private let state: ProgressType
     private let background: Color
-    private let action: () -> Void
 
-    init(label: String, image: String, value: Int, progress: Int? = nil, state: ProgressType = .idle, background: Color, action: @escaping () -> Void) {
+    init(
+        label: String,
+        image: String,
+        value: Int,
+        progress: Int? = nil,
+        state: ProgressType = .idle,
+        background: Color
+    ) {
         self.label = label
         self.image = image
         self.value = value
         self.state = state
         self.background = background
-        self.action = action
     }
 
     enum ProgressType {
@@ -82,24 +87,8 @@ struct StatisticCardView: View {
                 Text(label)
                     .font(.caption)
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.forward")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 12, height: 12)
-                .foregroundColor(Color(.systemGray3))
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
         }
         .foregroundColor(.gray)
-        .padding(.horizontal)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.tertiarySystemBackground))
-        .cornerRadius(8)
-        .onTapGesture { action() }
     }
 }
 
@@ -107,7 +96,7 @@ struct StatisticCardView: View {
     StatisticCardView(
         label: "Follow Gain",
         image: Assets.Bold.arrowDown,
-        value: 20, background: .green,
-        action: {}
+        value: 20,
+        background: .green
     )
 }

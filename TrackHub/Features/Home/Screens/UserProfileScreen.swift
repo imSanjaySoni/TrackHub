@@ -46,16 +46,14 @@ struct UserProfileScreen: View {
 
     @ViewBuilder
     private func FollowState(_ state: UserRelationType) -> some View {
-        HStack {
-            Image(state.icon)
-                .foregroundColor(state == .noRelation ? .gray : .green)
-                .containerShape(Circle())
-
-            Text(state.label)
-        }
-        .font(.callout)
-        .foregroundColor(.gray)
-        .padding(.vertical, 8)
+        Text(state.label)
+            .font(.caption)
+            .fontWeight(.semibold)
+            .padding(.vertical, 6)
+            .padding(.horizontal, 10)
+            .foregroundColor(state == .noRelation ? .gray : .green)
+            .background((state == .noRelation ? Color.gray : Color.green).opacity(0.2))
+            .clipShape(.capsule)
     }
 
     @ViewBuilder
@@ -91,7 +89,6 @@ struct UserProfileScreen: View {
 
                 Text(vm.isFollowing ? "Following" : "Follow")
             }
-
             .foregroundColor(.onPrimary)
             .font(.callout)
             .fontWeight(.medium)
@@ -99,11 +96,8 @@ struct UserProfileScreen: View {
             .frame(minWidth: 0, maxWidth: .infinity)
             .background(
                 .thinMaterial.opacity(vm.isFollowing ? 0.5 : 1.0),
-                in: RoundedRectangle(cornerRadius: 8)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.gray.opacity(0.3))
+                in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(lineWidth: 2)
             )
         }
     }

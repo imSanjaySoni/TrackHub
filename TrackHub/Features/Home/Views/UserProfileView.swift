@@ -44,7 +44,7 @@ struct UserProfileView: View {
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: 80, height: 80)
+            .frame(width: 64, height: 64)
             .background(.thinMaterial)
             .clipShape(.circle)
 
@@ -76,53 +76,66 @@ struct UserProfileView: View {
 
     @ViewBuilder
     private func ProfileInfo() -> some View {
-        Group {
+        VStack(alignment: .leading, spacing: 8) {
             if let company = user.company {
-                Label(company, image: Assets.Outline.work)
+                CustomLabel(company, image: Assets.Outline.work)
             }
 
             if let location = user.location {
-                Label(location, image: Assets.Outline.location)
+                CustomLabel(location, image: Assets.Outline.location)
             }
 
             if let email = user.email {
-                Label(email, image: Assets.Outline.email)
+                CustomLabel(email, image: Assets.Outline.email)
             }
 
             HStack {
                 Image(Assets.Outline.users)
 
-                Button(
-                    action: {
+                // Followers Count
+                Group {
+                    Text("\(user.followers)")
+                        .fontWeight(.bold)
+                        .foregroundColor(.onPrimary)
+
+                    Text("Followers")
+                }
+                .if(onFollowersTap != nil) {
+                    $0.onTapGesture {
                         if let onFollowersTap {
                             onFollowersTap()
                         }
-                    }) {
-                        Text("\(user.followers)")
-                            .fontWeight(.bold)
-                            .foregroundColor(.onPrimary)
-
-                        Text("Followers")
                     }
-                    .disabled(onFollowersTap == nil)
+                }
 
                 Text("•")
 
-                Button(
-                    action: {
-                        if let onFollowingTap {
-                            onFollowingTap()
-                        }
-                    }
-                ) {
+                // Following Count
+                Group {
                     Text("\(user.following)")
                         .fontWeight(.bold)
                         .foregroundColor(.onPrimary)
 
                     Text("Following")
                 }
-                .disabled(onFollowingTap == nil)
+                .if(onFollowingTap != nil) {
+                    $0.onTapGesture {
+                        if let onFollowingTap {
+                            onFollowingTap()
+                        }
+                    }
+                }
             }
+        }
+        .foregroundColor(.gray)
+        .font(.callout)
+    }
+
+    @ViewBuilder
+    private func CustomLabel(_ text: String, image: String) -> some View {
+        HStack {
+            Image(image)
+            Text(text)
         }
         .foregroundColor(.gray)
         .font(.callout)

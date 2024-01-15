@@ -22,13 +22,11 @@ struct UsersScreen: View {
 
     var body: some View {
         RequestPhaseView(vm.users, body: { users in
-            List {
-                ForEach(users) { user in
-                    UserCardView(user: user) { isFollowing in
-                        vm.followOrUnfollowUser(with: user.username, for: isFollowing)
-                    }
-                    .onTapGesture { selectedUser = user }
+            List(users) { user in
+                UserCardView(user: user) { isFollowing in
+                    vm.followOrUnfollowUser(with: user.username, for: isFollowing)
                 }
+                .onTapGesture { selectedUser = user }
             }
         })
         .onAppear { vm.loadUsers(for: userType) }

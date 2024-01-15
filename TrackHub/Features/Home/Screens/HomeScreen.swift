@@ -7,50 +7,6 @@
 
 import SwiftUI
 
-private extension UsersType {
-    var title: String {
-        switch self {
-        case .followers:
-            "Followers"
-        case .following:
-            "Following"
-        case .mutual:
-            "Mutual Following"
-        case .newFollowers:
-            "New Followers"
-        case .lostFollowers:
-            "Follower Lost"
-        case .notFollowingMeBack:
-            "Not Following Me Back"
-        case .iAmNotFollowingBack:
-            "I'm Not Following Back"
-        case .unfollowed:
-            "Users I've Unfollowed"
-        }
-    }
-
-    var image: String {
-        switch self {
-        case .followers:
-            Assets.gitHub
-        case .following:
-            Assets.gitHub
-        case .mutual:
-            Assets.Bold.mutual
-        case .newFollowers:
-            Assets.gitHub
-        case .lostFollowers:
-            Assets.gitHub
-        case .notFollowingMeBack:
-            Assets.Bold.following
-        case .iAmNotFollowingBack:
-            Assets.Bold.follower
-        case .unfollowed:
-            Assets.gitHub
-        }
-    }
-}
-
 struct HomeScreen: View {
     @State private var path = NavigationPath()
 
@@ -59,29 +15,26 @@ struct HomeScreen: View {
     var body: some View {
         NavigationStack(path: $path) {
             RequestPhaseView(vm.phase) { data in
-                ScrollView(showsIndicators: false) {
+                List {
                     // Current User Profile
                     UserProfileView(
                         user: data.user,
                         onFollowersTap: { path.append(UsersType.followers) },
                         onFollowingTap: { path.append(UsersType.following) }
                     )
-
-                    Divider()
-                        .padding(.vertical, 20)
+                    .listRowInsets(.none)
+                    .listSectionSeparator(.hidden)
+                    .listRowBackground(Color.clear)
 
                     // Profile Statics
                     StatisticsView(data)
-
-                    Spacer(minLength: 20)
                 }
             }
-            .fillFrame()
-            .padding(.horizontal)
+            .padding(.top, -40)
+            .listStyle(.grouped)
+            .scrollIndicators(.hidden)
             .refreshable { await vm.refresh() }
-            .background(Color(.secondarySystemBackground))
-//            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitle("Home", displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { path.append("settings") }) {
@@ -96,65 +49,66 @@ struct HomeScreen: View {
 
     @ViewBuilder
     private func StatisticsView(_ data: HomeScreenDataModel) -> some View {
-        LazyVStack(alignment: .leading) {
-            Section(
-                header: Text("Activity")
-                    .font(.title2)
-            ) {
-                /// New Followers
+        Section {
+            /// New Followers
+            NavigationLink(value: UsersType.newFollowers) {
                 StatisticCardView(
                     label: UsersType.newFollowers.title,
                     image: UsersType.newFollowers.image,
                     value: data.newFollowersCount,
                     state: .gain(0),
-                    background: .gray,
-                    action: { path.append(UsersType.newFollowers) }
+                    background: .gray
                 )
+            }
 
-                /// Followers Lost
+            /// Followers Lost
+            NavigationLink(value: UsersType.lostFollowers) {
                 StatisticCardView(
                     label: UsersType.lostFollowers.title,
                     image: UsersType.lostFollowers.image,
                     value: data.lostFollowersCount,
                     state: .loss(0),
-                    background: .pink,
-                    action: { path.append(UsersType.lostFollowers) }
+                    background: .pink
                 )
+            }
 
-                /// Not Following Me Back
+            /// Not Following Me Back
+            NavigationLink(value: UsersType.notFollowingMeBack) {
                 StatisticCardView(
                     label: UsersType.notFollowingMeBack.title,
                     image: UsersType.notFollowingMeBack.image,
                     value: data.notFollowingMeBackCount,
-                    background: .teal,
-                    action: { path.append(UsersType.notFollowingMeBack) }
+                    background: .teal
                 )
+            }
 
-                /// I am Not Following Back
+            /// I am Not Following Back
+            NavigationLink(value: UsersType.iAmNotFollowingBack) {
                 StatisticCardView(
                     label: UsersType.iAmNotFollowingBack.title,
                     image: UsersType.iAmNotFollowingBack.image,
                     value: data.notFollowingCount,
-                    background: .blue,
-                    action: { path.append(UsersType.iAmNotFollowingBack) }
+                    background: .blue
                 )
+            }
 
-                /// Mutual Following
+            /// Mutual Following
+            NavigationLink(value: UsersType.mutual) {
                 StatisticCardView(
                     label: UsersType.mutual.title,
                     image: UsersType.mutual.image,
                     value: data.mutualsCount,
-                    background: .orange,
-                    action: { path.append(UsersType.mutual) }
+                    background: .orange
                 )
+            }
 
-                /// Unfollowed Users
+            /// Unfollowed Users
+            NavigationLink(value: UsersType.unfollowed) {
                 StatisticCardView(
                     label: UsersType.unfollowed.title,
                     image: UsersType.unfollowed.image,
                     value: data.unfollowedCount,
-                    background: .indigo,
-                    action: { path.append(UsersType.unfollowed) }
+                    background: .indigo
                 )
             }
         }
